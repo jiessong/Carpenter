@@ -37,7 +37,7 @@ public class WoodController {
     }
 
     @PutMapping("/woodsize")
-    public ResponseEntity<Double> changeWoodSize(@RequestBody Double size) {
+    public ResponseEntity<Integer> changeWoodSize(@RequestBody Integer size) {
 //        requestBody: , data;   requestParam: ?size=      pathVariable:  /:id
         try{
             woodServiceImpl.changeWoodLength(size);
@@ -49,9 +49,9 @@ public class WoodController {
     }
 
     @PostMapping("/woodsize")
-    public ResponseEntity<List<List<Double>>> calculateCuttingPlan(@RequestBody List<RequiredItem> requiredItemList) {
+    public ResponseEntity<List<List<Integer>>> calculateCuttingPlan(@RequestBody List<RequiredItem> requiredItemList) {
         try{
-            List<List<Double>> cuttings = woodServiceImpl.getCutting(requiredItemList);
+            List<List<Integer>> cuttings = woodServiceImpl.getCutting(requiredItemList);
             return new ResponseEntity<>(cuttings, HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

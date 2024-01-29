@@ -2,38 +2,35 @@ package com.js.carpenter.service.impl;
 
 import com.js.carpenter.model.RequiredItem;
 import com.js.carpenter.service.WoodService;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
-
+@Service
 public class WoodServiceImpl implements WoodService {
-    private double length=5400;
-    private ArrayList<Double> wastes = new ArrayList<>();
-    private int required;
+    private int length=5400;
     @Override
-    public double getWoodLength() {
+    public int getWoodLength() {
         return this.length;
     }
 
     @Override
-    public boolean changeWoodLength(double length) {
+    public boolean changeWoodLength(int length) {
         this.length=length;
         return true;
     }
 
     @Override
-    public List<List<Double>> getCutting(List<RequiredItem> requiredItemList) {
+    public List<List<Integer>> getCutting(List<RequiredItem> requiredItemList) {
         Collections.sort(requiredItemList);
-        int totalRequired = 0;
-
-        List<List<Double>> cuttings = new ArrayList<>();
+        List<List<Integer>> cuttings = new ArrayList<>();
         while(!requiredItemList.isEmpty()){
-            List<Double> cuttedWood=new ArrayList<>();
-            double currentWood=this.length;
+            List<Integer> cuttedWood=new ArrayList<>();
+            int currentWood=this.length;
             for(int i=0;i<requiredItemList.size();i++){
                 RequiredItem item=requiredItemList.get(i);
                while(currentWood>=item.getLength()&&item.getNumLeft()>0){
                    currentWood-=item.getLength();
-                   cuttedWood.add(Double.valueOf(item.getLength()));
+                   cuttedWood.add(item.getLength());
                    item.setNumLeft(item.getNumLeft()-1);
                }
             }

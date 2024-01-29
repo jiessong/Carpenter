@@ -9,6 +9,15 @@ public class RequiredItem implements Comparable<RequiredItem>{
         return numLeft;
     }
 
+    public RequiredItem(int length, int num) {
+        this.length = length;
+        this.num = num;
+        this.numLeft = num;
+    }
+
+    public RequiredItem() {
+    }
+
     public void setNumLeft(int numLeft) {
         this.numLeft = numLeft;
     }
