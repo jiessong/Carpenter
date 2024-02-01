@@ -13,11 +13,10 @@ export default class CalculateCutting extends Component {
 
     this.state = {
       length: 0,
-      editting: false,
-      submitted: false,
       data: null,
       inputs: [{length: 0, num: 0}],
-      cuttings: []
+      cuttings: [],
+      errorMessage : false
     };
   }
 
@@ -50,7 +49,6 @@ export default class CalculateCutting extends Component {
         this.setState({
           length: length,
           editting: false,
-          submitted: true,
           data: null
         });
         console.log(response.data);
@@ -82,6 +80,7 @@ export default class CalculateCutting extends Component {
   }
 
   handleInputChange(index, inputName, value){
+    this.setState({errorMessage: false});
     const newInputs = this.state.inputs.map((item, i) => {
       if (index !== i) return item;
       return {...item, [inputName]: value};
@@ -91,6 +90,19 @@ export default class CalculateCutting extends Component {
 
 
   submitRequiredItem(){  
+    this.setState({cuttings: []})
+    for (let index = 0; index < this.state.inputs.length; index++) {
+      const item = this.state.inputs[index];
+      const length = parseInt(item.length);
+      const num = parseInt(item.num);
+      if (isNaN(length) || !Number.isInteger(length) || isNaN(num) || !Number.isInteger(num) || length<=0 || num<=0 || length > this.state.length){
+        this.setState({errorMessage: true});
+        return;
+      }else{
+        this.setState({errorMessage: false});
+        console.log('no error', this.state.errorMessage);
+      }
+    }
     WoodDataService.getCuttings(this.state.inputs)
       .then(response => {
         let data=[];
@@ -138,9 +150,7 @@ export default class CalculateCutting extends Component {
             {
               this.state.editting && 
               <div className="shadow mt-10 sm:mt-0 px-4 py-5 bg-white sm:p-6">
-                {this.state.submitted ? (
-                    <div></div>
-                  ) : (
+                
                     <div>
                       <div className="">
                         <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -162,7 +172,7 @@ export default class CalculateCutting extends Component {
                           </button>
                       </div>
                       
-                    </div> )}
+                    </div> 
               </div>
             }
 
@@ -170,16 +180,19 @@ export default class CalculateCutting extends Component {
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                       Enter the length and pieces of wood required:
                 </label>
+                <label className="text-red-600 block mb-2 text-sm font-medium dark:text-red">
+                      {this.state.errorMessage && <div>You should enter the correct values</div>}
+                </label>
                 <div>
                   {this.state.inputs.map((item, index) => (
                       <div key={index}>
                         <div className="grid grid-cols-6 gap-6">
                             <div class="col-span-6 sm:col-span-3" key={index}>
-                                  <label class="block text-sm font-medium text-gray-700">Length</label>
+                                  <label class="block text-sm font-medium text-gray-700">Length (An integer value greater than 0, less than or equal to {this.state.length})</label>
                                   <input type="text" value={item.length} onChange={(e) => this.handleInputChange(index, 'length', e.target.value)}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" /> 
                             </div>
                             <div class="col-span-6 sm:col-span-3">
-                                <label class="block text-sm font-medium text-gray-700">Number</label>
+                                <label class="block text-sm font-medium text-gray-700">Number (An integer greater than 0.)</label>
                                 <input type="text" value={item.num} onChange={(e) => this.handleInputChange(index, 'num', e.target.value)}  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" /> 
                             </div>
                         </div>
