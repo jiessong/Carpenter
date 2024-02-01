@@ -33,7 +33,4 @@ We always start with a new standard wood length of 5400 mm for each requirement,
 5. A new wood is then taken, and the process is repeated starting from the longest wood needed. <br/>
 6. This process continues until all required wood pieces have been cut.<br/>
 
-## Front Pagae
-![alt text](Screen Shot 2024-02-01 at 4.20.39 pm.png)
-
 
